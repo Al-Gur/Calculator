@@ -8,7 +8,7 @@ public class CalculatorMain {
         }
         double x = Double.NaN;
         double y = Double.NaN;
-        double res;
+        double res = Double.NaN;
         String operation = "";
         try {
             x = Double.parseDouble(args[0]);

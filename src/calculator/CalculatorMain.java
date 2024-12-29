@@ -1,5 +1,8 @@
 package calculator;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
 public class CalculatorMain {
     public static void main(String[] args) {
         if (args.length < 3) {
@@ -8,7 +11,7 @@ public class CalculatorMain {
         }
         double x = Double.NaN;
         double y = Double.NaN;
-        double res = Double.NaN;
+        double res;
         String operation = "";
         try {
             x = Double.parseDouble(args[0]);
@@ -18,20 +21,30 @@ public class CalculatorMain {
             System.out.println("Error: type of first 2 arguments must be double!");
         }
 
+        Class<Calc> clazz = Calc.class;
         try {
-            switch (operation) {
-                case "Add":
-                    res = Calc.Add(x, y);
-                    break;
-                case "Subtract":
-                    res = Calc.Subtract(x, y);
-                    break;
-                default:
-                    System.out.println("Error: 3th argument denotes unknown operation!");
-                    return;
-            }
+            Method method = clazz.getDeclaredMethod(operation, double.class, double.class);
+            method.setAccessible(true);
+            Constructor constructor = clazz.getDeclaredConstructor();
+            res = (double) method.invoke(constructor.newInstance(), x, y);
+
+//            switch (operation) {
+//                case "Add":
+//                    res = Calc.Add(x, y);
+//                    break;
+//                case "Subtract":
+//                    res = Calc.Subtract(x, y);
+//                    break;
+//                default:
+//                    System.out.println("Error: 3th argument denotes unknown operation!");
+//                    return;
+//            }
+
+        } catch (NoSuchMethodException e) {
+            System.out.println("Error: 3th argument in the command line (" + operation + ") denotes unknown operation!");
+            return;
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Error (" + e + "), message = " + e.getMessage());
             return;
         }
 

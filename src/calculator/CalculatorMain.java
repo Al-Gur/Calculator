@@ -9,23 +9,23 @@ public class CalculatorMain {
             System.out.println("Error: 3 arguments must be entered in command line!");
             return;
         }
-        double x = Double.NaN;
-        double y = Double.NaN;
+        double x;
+        double y;
         double res;
-        String operation = "";
+        String operation;
         try {
             x = Double.parseDouble(args[0]);
             y = Double.parseDouble(args[1]);
             operation = args[2];
         } catch (Exception e) {
             System.out.println("Error: type of first 2 arguments must be double!");
+            return;
         }
 
-        Class<Calc> clazz = Calc.class;
         try {
-            Method method = clazz.getDeclaredMethod(operation, double.class, double.class);
+            Method method = Calc.class.getDeclaredMethod(operation, double.class, double.class);
             method.setAccessible(true);
-            Constructor constructor = clazz.getDeclaredConstructor();
+            Constructor constructor = Calc.class.getDeclaredConstructor();
             res = (double) method.invoke(constructor.newInstance(), x, y);
 
 //            switch (operation) {
